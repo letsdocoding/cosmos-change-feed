@@ -2,35 +2,39 @@
  Author: Abhinav Mishra
  emailid:teachmeabhinav@gmail.com 
  */
+
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 
-namespace ChangeFeed
+namespace Cosmos_Change_Feed
 {
-    public class CosmosDBAPI
+    public class CosmosDbApi
     {
-        private MongoClient client { get; set; }
-        private IMongoDatabase dataBase { get; set; }
-        private IMongoCollection<BsonDocument> collection { get; set; }
-        private string dbConnectionString { get; set; }
-        private string dbName { get; set; }
-        private string dbCollection { get; set; }
-        private string shardkey { get; set; }
+        private readonly IMongoCollection<BsonDocument> _collection;
+        private string _shardKey;
 
-        public CosmosDBAPI(string dbConnectionString, string dbName, string dbCollection, string _shardkey)
+        public CosmosDbApi(string dbConnectionString, string dbName, string dbCollection, string shardKey)
         {
-            this.dbConnectionString = dbConnectionString ?? throw new ArgumentNullException(nameof(dbConnectionString));
-            this.dbName = dbName ?? throw new ArgumentNullException(nameof(dbName));
-            this.dbCollection = dbCollection ?? throw new ArgumentNullException(nameof(dbCollection));
-            this.shardkey = _shardkey ?? throw new ArgumentNullException(nameof(_shardkey));
-            this.dbConnectionString = dbConnectionString ?? throw new ArgumentNullException(nameof(dbConnectionString));
-            this.dbName = dbName ?? throw new ArgumentNullException(nameof(dbName));
-            this.dbCollection = dbCollection ?? throw new ArgumentNullException(nameof(dbCollection));
-            client = new MongoClient(this.dbConnectionString);
-            dataBase = client.GetDatabase(this.dbName);
-            collection = dataBase.GetCollection<BsonDocument>(this.dbCollection);
-            shardkey = _shardkey;
+            if (dbConnectionString == null)
+            {
+                throw new ArgumentNullException(nameof(dbConnectionString));
+            }
+
+            if (dbName == null)
+            {
+                throw new ArgumentNullException(nameof(dbName));
+            }
+
+            if (dbCollection == null)
+            {
+                throw new ArgumentNullException(nameof(dbCollection));
+            }
+            _shardKey = shardKey ?? throw new ArgumentNullException(nameof(shardKey));
+            var client = new MongoClient(dbConnectionString);
+            var dataBase = client.GetDatabase(dbName);
+            _collection = dataBase.GetCollection<BsonDocument>(dbCollection);
+            _shardKey = shardKey;
         }
         public void ChangeFeed()
         {
@@ -45,21 +49,16 @@ namespace ChangeFeed
             {
                 FullDocument = ChangeStreamFullDocumentOption.UpdateLookup
             };
-            Console.WriteLine($"Change Stream Start for {this.collection}");
-            var enumerator = collection.Watch(pipeline, options).ToEnumerable().GetEnumerator();
+            Console.WriteLine($"Change Stream Start for {_collection}");
+            var enumerator = _collection.Watch(pipeline, options).ToEnumerable().GetEnumerator();
             try
             {
 
 
                 while (enumerator.MoveNext())
                 {
-                    Console.WriteLine(enumerator.Current.ToString());                  
+                    if (enumerator.Current != null) Console.WriteLine(enumerator.Current.ToString());
                 }
-            }
-            catch (Exception ex)
-            {
-
-                throw;
             }
             finally
             {
