@@ -2,13 +2,14 @@
  Author: Abhinav Mishra
  emailid:teachmeabhinav@gmail.com 
  */
+
 using System;
 
-namespace ChangeFeed
+namespace Cosmos_Change_Feed
 {
     class Program
     {
-      
+
         static void Main(string[] args)
         {
 
@@ -26,7 +27,7 @@ namespace ChangeFeed
                     string dbCollection = Console.ReadLine();
                     Console.WriteLine("Lease Container name");
                     string shardkey = Console.ReadLine();
-                    var cosmos = new CosmosDBAPI(dbConnectionString, dbName, dbCollection, shardkey);
+                    var cosmos = new CosmosDbApi(dbConnectionString, dbName, dbCollection, shardkey);
                     cosmos.ChangeFeed();
                     break;
                 case 2:
@@ -38,8 +39,8 @@ namespace ChangeFeed
                     string collectiontoWatch = Console.ReadLine();
                     Console.WriteLine("Lease Collection");
                     string leaseCollection = Console.ReadLine();
-                    var sql = new CoreSQLAPI(dbConnectionString1, collectiontoWatch, leaseCollection, dbName1);
-                    sql.Changefeed();
+                    var sql = new CoreSqlApi(dbConnectionString1, dbName1, collectiontoWatch, leaseCollection);
+                    sql.ChangeFeed();
                     break;
                 default:
                     Console.WriteLine("Wrong Entry");
