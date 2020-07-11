@@ -9,5 +9,5 @@ The operationType and updateDescription properties are not yet supported in the 
 
 More detail can be found at https://docs.microsoft.com/en-us/azure/cosmos-db/mongodb-change-streams?tabs=javascript
 
-Core Version:-2.1
+
 
