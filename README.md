@@ -1,7 +1,7 @@
 # Cosmos-Change-Feed
-This repo sample code for the kick start for any who want to do hands on cosmos change feed for SQL or Cosmos
+This repo has sample code that can be used to  the kick start the change feed functionality  for anyone  who want to do hands on cosmos change feed for SQL or Cosmos
 
-For SQL Create 2 container in Cosmos one for watch and another for lease For Mongo just create one collection to watch
+For SQL -  Create 2 container in Cosmos one for watch and another for lease. For Mongo just create one collection to watch
 
 The following limitations are applicable when using change streams:
 
